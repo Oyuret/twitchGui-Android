@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">TwitchGUI</string>
+    <string name="action_settings">Settings</string>
+    <string name="load_more">Load more</string>
+    <string name="loading">Loading…</string>
+    <string name="nav_browse">Browse</string>
+    <string name="nav_following">Following</string>
+    <string name="nav_search">Search</string>
+</resources>

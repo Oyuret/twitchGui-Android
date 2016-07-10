@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">TwitchGUI</string>
+    <string name="action_settings">Inställningar</string>
+    <string name="load_more">Ladda mera</string>
+    <string name="loading">Laddar…</string>
+    <string name="nav_browse">Bläddra</string>
+    <string name="nav_following">Följer</string>
+    <string name="nav_search">Sök</string>
+</resources>
