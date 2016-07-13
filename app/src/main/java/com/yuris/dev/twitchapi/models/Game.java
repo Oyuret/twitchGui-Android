@@ -39,6 +39,10 @@ public class Game {
     public static class GameFactory {
         private Game game;
 
+        public GameFactory() {
+            this.game = new Game();
+        }
+
         public GameFactory withName(String name) {
             this.game.name = name;
             return this;

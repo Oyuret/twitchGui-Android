@@ -2,11 +2,20 @@ package com.yuris.dev.twitchgui;
 
 import android.content.Context;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+
+import com.yuris.dev.twitchapi.models.Game;
+import com.yuris.dev.twitchapi.workers.GamesWorker;
+import com.yuris.dev.utils.AsyncTaskResult;
+
+import java.util.List;
 
 
 /**
@@ -26,6 +35,9 @@ public class BrowseFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    private Button button;
+    private EditText text;
 
     private OnFragmentInteractionListener mListener;
 
@@ -64,7 +76,32 @@ public class BrowseFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_browse, container, false);
+        View view =  inflater.inflate(R.layout.fragment_browse, container, false);
+        text = (EditText) view.findViewById(R.id.editText);
+
+        button = (Button) view.findViewById(R.id.button);
+        button.setOnClickListener(
+                new View.OnClickListener() {
+                                      @Override
+                                      public void onClick(View v) {
+                                          AsyncTask test = new GamesWorker() {
+                                              @Override
+                                              protected void onPostExecute(AsyncTaskResult<List<Game>> result) {
+                                                  if(result.hasError()) {
+                                                      Exception e = result.getError();
+                                                      text.setText(e.getMessage());
+                                                  } else {
+                                                      List<Game> games = result.getResult();
+                                                      text.setText(games.get(0).toString());
+                                                  }
+                                              }
+                                          };
+                                          test.execute(new Integer[]{Integer.parseInt("0")});
+                                      }
+            }
+        );
+
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -105,4 +142,6 @@ public class BrowseFragment extends Fragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+
+
 }
