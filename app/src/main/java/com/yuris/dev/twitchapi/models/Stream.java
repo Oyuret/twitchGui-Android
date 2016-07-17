@@ -75,6 +75,14 @@ public class Stream {
         return previewLarge;
     }
 
+    @Override
+    public String toString() {
+        return "Stream{" +
+                "displayName='" + displayName + '\'' +
+                ", game='" + game + '\'' +
+                '}';
+    }
+
     public static class StreamFactory {
         private Stream stream;
 

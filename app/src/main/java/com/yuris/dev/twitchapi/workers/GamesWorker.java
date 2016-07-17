@@ -81,6 +81,7 @@ public abstract class GamesWorker extends AsyncTask<Integer, Void, AsyncTaskResu
                 .withName(gameObj.getJSONObject("game").getString("name"))
                 .withChannels(gameObj.getInt("channels"))
                 .withViewers(gameObj.getInt("viewers"))
+                .withLogo(gameObj.getJSONObject("game").getJSONObject("box").getString("medium"))
                 .make();
 
         return game;

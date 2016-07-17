@@ -2,11 +2,7 @@ package com.yuris.dev.twitchgui;
 
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.LayoutInflaterCompat;
-import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -16,8 +12,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.yuris.dev.twitchgui.games.GamesFragment;
+
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener,
+        GamesFragment.OnGameSelectedListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +41,8 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
+        } else if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+            getSupportFragmentManager().popBackStack();
         } else {
             super.onBackPressed();
         }
@@ -85,8 +86,11 @@ public class MainActivity extends AppCompatActivity
             fragment = new SearchFragment().newInstance("test1", "test2");
         }
 
-        // Insert the fragment by replacing any existing fragment
+        // Clear the backstack
         FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
+        // Insert the fragment by replacing any existing fragment
         fragmentManager.beginTransaction()
                 .replace(R.id.content_frame, fragment)
                 .commit();
@@ -94,5 +98,13 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public void onGameSelected(String gameName) {
+        BrowseFragment browseFragment = (BrowseFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.content_frame);
+
+        browseFragment.goToStreams(gameName);
     }
 }

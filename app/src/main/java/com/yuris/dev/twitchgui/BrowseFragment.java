@@ -1,31 +1,15 @@
 package com.yuris.dev.twitchgui;
 
 import android.content.Context;
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
 
-import com.yuris.dev.twitchapi.models.Game;
-import com.yuris.dev.twitchapi.workers.GamesWorker;
-import com.yuris.dev.utils.AsyncTaskResult;
+import com.yuris.dev.twitchgui.games.GamesFragment;
 
-import java.util.List;
-
-
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link BrowseFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link BrowseFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class BrowseFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -35,11 +19,6 @@ public class BrowseFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-
-    private Button button;
-    private EditText text;
-
-    private OnFragmentInteractionListener mListener;
 
     public BrowseFragment() {
         // Required empty public constructor
@@ -77,70 +56,33 @@ public class BrowseFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_browse, container, false);
-        text = (EditText) view.findViewById(R.id.editText);
 
-        button = (Button) view.findViewById(R.id.button);
-        button.setOnClickListener(
-                new View.OnClickListener() {
-                                      @Override
-                                      public void onClick(View v) {
-                                          AsyncTask test = new GamesWorker() {
-                                              @Override
-                                              protected void onPostExecute(AsyncTaskResult<List<Game>> result) {
-                                                  if(result.hasError()) {
-                                                      Exception e = result.getError();
-                                                      text.setText(e.getMessage());
-                                                  } else {
-                                                      List<Game> games = result.getResult();
-                                                      text.setText(games.get(0).toString());
-                                                  }
-                                              }
-                                          };
-                                          test.execute(new Integer[]{Integer.parseInt("0")});
-                                      }
-            }
-        );
+        Fragment fragment = new GamesFragment().newInstance("test","test2");
+        FragmentManager fragmentManager = getFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.browse_content, fragment)
+                .commit();
 
         return view;
-    }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            //throw new RuntimeException(context.toString()
-                    //+ " must implement OnFragmentInteractionListener");
-        }
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+    public void goToStreams(String gameName) {
+        Fragment fragment = new StreamsFragment().newInstance("test","test2");
+        FragmentManager fragmentManager = getFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.browse_content, fragment)
+                .addToBackStack(null)
+                .commit();
     }
 
 
