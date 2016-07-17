@@ -12,6 +12,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,7 +38,8 @@ public abstract class StreamsWorker extends AsyncTask<String, Void, AsyncTaskRes
     }
 
     private String makeCall(String game, Integer offset) throws Exception {
-        String urlString = String.format("https://api.twitch.tv/kraken/streams?game=%s&limit=100&offset=%d", game,offset);
+        String escapedGame = URLEncoder.encode(game, "utf-8");
+        String urlString = String.format("https://api.twitch.tv/kraken/streams?game=%s&limit=100&offset=%d", escapedGame, offset);
         URL url = new URL(urlString);
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
         urlConnection.setRequestProperty("Accept","application/vnd.twitchtv.v3+json");

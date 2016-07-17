@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/stream_preview"
+        android:src="@drawable/preview_missing"
+        android:scaleType="fitStart"
+        android:adjustViewBounds="true"
+        android:layout_alignParentStart="false" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignTop="@+id/stream_preview"
+        android:layout_alignLeft="@+id/stream_preview"
+        android:layout_alignBottom="@+id/stream_preview"
+        android:layout_alignRight="@+id/stream_preview"
+        android:gravity="left|bottom"
+        android:paddingLeft="5dp"
+        android:paddingBottom="5dp"
+        android:paddingRight="5dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:id="@+id/display_name"
+            android:text="Streamer name"
+            android:textColor="#FFFFFF"
+            android:shadowColor="#000000"
+            android:shadowDx="0.0"
+            android:shadowDy="0.0"
+            android:shadowRadius="5.0"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="Stream status"
+            android:id="@+id/stream_status"
+            android:layout_below="@+id/display_name"
+            android:textColor="#FFFFFF"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:shadowColor="#000000"
+            android:shadowDx="0.0"
+            android:shadowDy="0.0"
+            android:shadowRadius="5.0"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="Small Text"
+            android:id="@+id/stream_viewers"
+            android:layout_below="@+id/stream_status"
+            android:textColor="#FFFFFF"
+            android:shadowColor="#000000"
+            android:shadowDx="0.0"
+            android:shadowDy="0.0"
+            android:shadowRadius="5.0"
+            android:textStyle="bold" />
+    </RelativeLayout>
+</RelativeLayout>

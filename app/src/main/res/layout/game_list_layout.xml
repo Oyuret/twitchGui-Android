@@ -6,31 +6,26 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:id="@+id/game_icon"
-        android:src="@drawable/fa_twitch"
+        android:src="@drawable/boxart_missing"
         android:layout_alignParentEnd="false"
-        android:scaleType="fitStart"
+        android:scaleType="fitCenter"
         android:adjustViewBounds="true"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
         android:id="@+id/game_name"
         android:layout_alignTop="@+id/game_icon"
         android:layout_alignLeft="@+id/game_icon"
         android:layout_alignBottom="@+id/game_icon"
         android:layout_alignRight="@+id/game_icon"
-        android:gravity="bottom|center" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:id="@+id/game_description"
         android:gravity="bottom|center"
-        android:layout_alignTop="@+id/game_icon"
-        android:layout_alignLeft="@+id/game_icon"
-        android:layout_alignBottom="@+id/game_icon"
-        android:layout_alignRight="@+id/game_icon"
-        android:layout_alignBaseline="@+id/game_name" />
+        android:text="Game Name"
+        android:paddingBottom="20dp"
+        android:textColor="#FFFFFF"
+        android:shadowColor="#000000"
+        android:shadowDx="0.0"
+        android:shadowDy="0.0"
+        android:shadowRadius="2.0"/>
+
 </RelativeLayout>

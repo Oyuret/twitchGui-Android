@@ -9,14 +9,21 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.yuris.dev.kodiapi.workers.KodiWorker;
 import com.yuris.dev.twitchgui.games.GamesFragment;
+import com.yuris.dev.twitchgui.streams.StreamsFragment;
+import com.yuris.dev.utils.AsyncTaskResult;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
-        GamesFragment.OnGameSelectedListener {
+        GamesFragment.OnGameSelectedListener,
+        StreamsFragment.OnStreamSelectedListener {
+
+    private boolean kodiIsIdle = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,7 +86,7 @@ public class MainActivity extends AppCompatActivity
         Fragment fragment = null;
 
         if (id == R.id.nav_browse) {
-            fragment = new BrowseFragment().newInstance("test","test2");
+            fragment = new BrowseFragment().newInstance();
         } else if (id == R.id.nav_following) {
             fragment = new FollowingFragment().newInstance("test1","test2");
         } else if (id == R.id.nav_search) {
@@ -106,5 +113,27 @@ public class MainActivity extends AppCompatActivity
                 .findFragmentById(R.id.content_frame);
 
         browseFragment.goToStreams(gameName);
+    }
+
+    @Override
+    public void onStreamSelected(String streamName) {
+
+        if(kodiIsIdle) {
+            kodiIsIdle = false;
+
+            KodiWorker playStream = new KodiWorker() {
+                @Override
+                protected void onPostExecute(AsyncTaskResult<String> stringAsyncTaskResult) {
+                    if(stringAsyncTaskResult.hasError()) {
+                        Log.e("Stream Failed", stringAsyncTaskResult.getError().getMessage());
+                    } else {
+                        Log.e("Stream", stringAsyncTaskResult.getResult());
+                    }
+                    kodiIsIdle = true;
+                }
+            };
+            playStream.execute(new String[]{streamName});
+        }
+
     }
 }

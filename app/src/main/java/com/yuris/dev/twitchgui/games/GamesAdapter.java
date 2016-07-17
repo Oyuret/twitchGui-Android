@@ -1,18 +1,15 @@
 package com.yuris.dev.twitchgui.games;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.jakewharton.picasso.OkHttp3Downloader;
 import com.squareup.picasso.Callback;
-import com.squareup.picasso.OkHttpDownloader;
 import com.squareup.picasso.Picasso;
 import com.yuris.dev.twitchapi.models.Game;
 import com.yuris.dev.twitchgui.R;
@@ -52,14 +49,14 @@ public class GamesAdapter extends ArrayAdapter<Game> {
         final TextView gameName = (TextView) rowView.findViewById(R.id.game_name);
         ImageView gameIcon = (ImageView) rowView.findViewById(R.id.game_icon);
 
-        Picasso.with(context).load(values.get(position).getLogo())//
-                .placeholder(R.drawable.fa_file_image_o) //
-                .error(R.drawable.fa_twitch) //
+        picasso.load(values.get(position).getLogo())//
+                .placeholder(R.drawable.boxart_missing) //
+                .error(R.drawable.boxart_missing) //
                 .tag(context) //
                 .into(gameIcon, new Callback() {
                     @Override
                     public void onSuccess() {
-
+                        gameName.setText("");
                     }
 
                     @Override
