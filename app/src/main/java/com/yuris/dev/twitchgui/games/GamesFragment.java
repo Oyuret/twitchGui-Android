@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.GridView;
 
@@ -15,6 +16,7 @@ import com.yuris.dev.twitchapi.models.Game;
 import com.yuris.dev.twitchapi.workers.GamesWorker;
 import com.yuris.dev.twitchgui.R;
 import com.yuris.dev.utils.AsyncTaskResult;
+import com.yuris.dev.utils.EndlessScrollListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,8 +31,8 @@ import java.util.List;
  * create an instance of this fragment.
  */
 public class GamesFragment extends Fragment {
-    List<Game> games;
-    GamesAdapter gamesAdapter;
+    private List<Game> games;
+    private GamesAdapter gamesAdapter;
 
     private OnGameSelectedListener mListener;
 
@@ -63,12 +65,7 @@ public class GamesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_games, container, false);
-    }
-
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+        View view =  inflater.inflate(R.layout.fragment_games, container, false);
 
         GridView gamesListView = (GridView) view.findViewById(R.id.gamesListView);
         gamesListView.setAdapter(gamesAdapter);
@@ -83,24 +80,27 @@ public class GamesFragment extends Fragment {
             }
 
         });
+
+        gamesListView.setOnScrollListener(new EndlessScrollListener() {
+            @Override
+            public boolean onLoadMore(int page, int totalItemsCount) {
+                loadData();
+                return true;
+            }
+        });
+
+        return view;
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
     }
 
     @Override
     public void onStart() {
         super.onStart();
-
-        GamesWorker getGames = new GamesWorker() {
-            @Override
-            protected void onPostExecute(AsyncTaskResult<List<Game>> listAsyncTaskResult) {
-                if(listAsyncTaskResult.hasError()) {
-                    Log.e("Games", "Error loading games");
-                } else {
-                    games.addAll(listAsyncTaskResult.getResult());
-                    gamesAdapter.notifyDataSetChanged();
-                }
-            }
-        };
-        getGames.execute(new Integer[]{Integer.parseInt("0")});
+        loadData();
     }
 
     @Override
@@ -122,5 +122,21 @@ public class GamesFragment extends Fragment {
 
     public interface OnGameSelectedListener {
         void onGameSelected(String gameName);
+    }
+
+    private void loadData() {
+
+        GamesWorker getGames = new GamesWorker() {
+            @Override
+            protected void onPostExecute(AsyncTaskResult<List<Game>> listAsyncTaskResult) {
+                if(listAsyncTaskResult.hasError()) {
+                    Log.e("Games", "Error loading games");
+                } else {
+                    games.addAll(listAsyncTaskResult.getResult());
+                    gamesAdapter.notifyDataSetChanged();
+                }
+            }
+        };
+        getGames.execute(new Integer[]{games.size()});
     }
 }

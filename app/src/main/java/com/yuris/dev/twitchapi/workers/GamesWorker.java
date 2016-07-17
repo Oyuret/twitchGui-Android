@@ -39,7 +39,7 @@ public abstract class GamesWorker extends AsyncTask<Integer, Void, AsyncTaskResu
     }
 
     private String makeCall(Integer offset) throws Exception {
-        String urlString = String.format("https://api.twitch.tv/kraken/games/top?limit=100&offset=%d", offset);
+        String urlString = String.format("https://api.twitch.tv/kraken/games/top?limit=50&offset=%d", offset);
         URL url = new URL(urlString);
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
         urlConnection.setRequestProperty("Accept","application/vnd.twitchtv.v3+json");

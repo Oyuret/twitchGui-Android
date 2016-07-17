@@ -21,7 +21,8 @@ import com.yuris.dev.utils.AsyncTaskResult;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         GamesFragment.OnGameSelectedListener,
-        StreamsFragment.OnStreamSelectedListener {
+        StreamsFragment.OnStreamSelectedListener,
+        FollowingFragment.OnFollowedStreamSelectedListener {
 
     private boolean kodiIsIdle = true;
 
@@ -88,7 +89,7 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.nav_browse) {
             fragment = new BrowseFragment().newInstance();
         } else if (id == R.id.nav_following) {
-            fragment = new FollowingFragment().newInstance("test1","test2");
+            fragment = new FollowingFragment().newInstance("Oyuret");
         } else if (id == R.id.nav_search) {
             fragment = new SearchFragment().newInstance("test1", "test2");
         }
@@ -135,5 +136,25 @@ public class MainActivity extends AppCompatActivity
             playStream.execute(new String[]{streamName});
         }
 
+    }
+
+    @Override
+    public void onFollowedStreamSelected(String streamName) {
+        if(kodiIsIdle) {
+            kodiIsIdle = false;
+
+            KodiWorker playStream = new KodiWorker() {
+                @Override
+                protected void onPostExecute(AsyncTaskResult<String> stringAsyncTaskResult) {
+                    if(stringAsyncTaskResult.hasError()) {
+                        Log.e("Stream Failed", stringAsyncTaskResult.getError().getMessage());
+                    } else {
+                        Log.e("Stream", stringAsyncTaskResult.getResult());
+                    }
+                    kodiIsIdle = true;
+                }
+            };
+            playStream.execute(new String[]{streamName});
+        }
     }
 }

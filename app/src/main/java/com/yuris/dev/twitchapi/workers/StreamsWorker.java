@@ -39,7 +39,7 @@ public abstract class StreamsWorker extends AsyncTask<String, Void, AsyncTaskRes
 
     private String makeCall(String game, Integer offset) throws Exception {
         String escapedGame = URLEncoder.encode(game, "utf-8");
-        String urlString = String.format("https://api.twitch.tv/kraken/streams?game=%s&limit=100&offset=%d", escapedGame, offset);
+        String urlString = String.format("https://api.twitch.tv/kraken/streams?game=%s&limit=50&offset=%d", escapedGame, offset);
         URL url = new URL(urlString);
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
         urlConnection.setRequestProperty("Accept","application/vnd.twitchtv.v3+json");
@@ -92,6 +92,7 @@ public abstract class StreamsWorker extends AsyncTask<String, Void, AsyncTaskRes
                 .withPreviewSmall(streamObj.getJSONObject("preview").getString("small"))
                 .withPreviewMedium(streamObj.getJSONObject("preview").getString("medium"))
                 .withPreviewLarge(streamObj.getJSONObject("preview").getString("large"))
+                .withOnline(true)
                 .make();
 
         return stream;

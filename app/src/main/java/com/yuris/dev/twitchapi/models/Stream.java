@@ -18,6 +18,7 @@ public class Stream {
     private String previewSmall;
     private String previewMedium;
     private String previewLarge;
+    private Boolean online;
 
     public String getName() {
         return name;
@@ -73,6 +74,10 @@ public class Stream {
 
     public String getPreviewLarge() {
         return previewLarge;
+    }
+
+    public Boolean getOnline() {
+        return online;
     }
 
     @Override
@@ -157,6 +162,11 @@ public class Stream {
 
         public StreamFactory withPreviewLarge(String previewLarge) {
             this.stream.previewLarge = previewLarge;
+            return this;
+        }
+
+        public StreamFactory withOnline(Boolean online) {
+            this.stream.online = online;
             return this;
         }
 

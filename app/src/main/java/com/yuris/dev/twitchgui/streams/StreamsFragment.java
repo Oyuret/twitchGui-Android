@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ListView;
@@ -18,6 +19,7 @@ import com.yuris.dev.twitchapi.models.Stream;
 import com.yuris.dev.twitchapi.workers.StreamsWorker;
 import com.yuris.dev.twitchgui.R;
 import com.yuris.dev.utils.AsyncTaskResult;
+import com.yuris.dev.utils.EndlessScrollListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -75,13 +77,7 @@ public class StreamsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_streams, container, false);
-    }
-
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
+        View view = inflater.inflate(R.layout.fragment_streams, container, false);
         ListView streamsListView = (ListView) view.findViewById(R.id.streams_list_view);
         streamsListView.setAdapter(streamsAdapter);
 
@@ -95,6 +91,21 @@ public class StreamsFragment extends Fragment {
             }
 
         });
+
+        streamsListView.setOnScrollListener(new EndlessScrollListener() {
+            @Override
+            public boolean onLoadMore(int page, int totalItemsCount) {
+                loadData();
+
+                return true;
+            }
+        });
+        return view;
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
     }
 
     @Override
@@ -111,6 +122,16 @@ public class StreamsFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+        loadData();
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
+
+    private void loadData() {
 
         StreamsWorker getSteams = new StreamsWorker() {
             @Override
@@ -126,12 +147,6 @@ public class StreamsFragment extends Fragment {
         };
 
         getSteams.execute(new String[]{gameName, String.valueOf(streams.size())});
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
     }
 
     public interface OnStreamSelectedListener {
