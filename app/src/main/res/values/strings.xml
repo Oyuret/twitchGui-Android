@@ -8,10 +8,18 @@
     <string name="nav_browse">Browse</string>
     <string name="nav_search">Search</string>
     <string name="nav_following">Following</string>
+    <string name="nav_settings">Settings</string>
 
     <string name="loading">Loading…</string>
     <string name="load_more">Load more</string>
+    <string name="settings_twitch_username">Twitch username</string>
+    <string name="settings_twitch_username_dialog">Enter your Twitch username</string>
+    <string name="settings_kodi_playback_quality">Playback quality</string>
+    <string name="settings_kodi_playback_quality_dialog">Pick your desired playback quality</string>
+    <string name="settings_kodi_playback_summary">The desired playback quality in Kodi</string>
+    <string name="settings_twitch_username_summary">Your username on Twitch</string>
+    <string name="settings_kodi_address">Kodi address</string>
+    <string name="settings_kodi_address_summary">The URL of the Kodi instance you wish to control</string>
+    <string name="settings_kodi_address_dialog">Enter the URL of your Kodi instance</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

@@ -4,7 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
+import android.support.v7.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,10 +31,6 @@ import java.util.List;
  */
 public class FollowingFragment extends Fragment {
 
-    private static final String ARG_USERNAME = "userName";
-
-    private String userName;
-
     List<Stream> streams;
     StreamsAdapter streamsAdapter;
 
@@ -54,7 +50,6 @@ public class FollowingFragment extends Fragment {
     public static FollowingFragment newInstance(String userName) {
         FollowingFragment fragment = new FollowingFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_USERNAME, userName);
         fragment.setArguments(args);
         return fragment;
     }
@@ -62,11 +57,9 @@ public class FollowingFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            userName = getArguments().getString(ARG_USERNAME);
-        }
         streams = new ArrayList<Stream>();
         streamsAdapter = new StreamsAdapter(getActivity(), streams);
+        loadData();
     }
 
     @Override
@@ -84,7 +77,7 @@ public class FollowingFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, final View view,
                                     int position, long id) {
                 final Stream stream = (Stream) parent.getItemAtPosition(position);
-                mListener.onFollowedStreamSelected(stream.getName());
+                mListener.onStreamSelected(stream.getName());
             }
 
         });
@@ -106,12 +99,6 @@ public class FollowingFragment extends Fragment {
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-        loadData();
-    }
-
-    @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof OnFollowedStreamSelectedListener) {
@@ -129,12 +116,20 @@ public class FollowingFragment extends Fragment {
     }
 
     private void loadData() {
+        String userName = PreferenceManager.getDefaultSharedPreferences(getContext())
+                .getString("settings_twitch_username", "");
+
+        if(userName.isEmpty()) {
+            mListener.notifyUser("Twitch username is not set. Go to settings");
+            return;
+        }
+
 
         FollowingWorker getFollowedStreams = new FollowingWorker() {
             @Override
             protected void onPostExecute(AsyncTaskResult<List<Stream>> listAsyncTaskResult) {
                 if(listAsyncTaskResult.hasError()) {
-                    Log.e("Following", listAsyncTaskResult.getError().getMessage());
+                    mListener.notifyUser("Failed to load Followed Streams");
                 } else {
                     streams.addAll(listAsyncTaskResult.getResult());
                     streamsAdapter.getFilter().filter("");
@@ -146,6 +141,7 @@ public class FollowingFragment extends Fragment {
     }
 
     public interface OnFollowedStreamSelectedListener {
-        void onFollowedStreamSelected(String streamName);
+        void onStreamSelected(String streamName);
+        void notifyUser(String message);
     }
 }

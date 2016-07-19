@@ -23,7 +23,10 @@ public abstract class KodiWorker extends AsyncTask<String, Void, AsyncTaskResult
     protected AsyncTaskResult<String> doInBackground(String... params) {
         String response;
         try {
-            response = playStream(params[0]);
+            String streamName = params[0];
+            Integer qualityCode = Integer.valueOf(params[1]);
+
+            response = playStream(streamName, qualityCode);
         } catch(Exception e) {
             return new AsyncTaskResult<String>(e);
         }
@@ -31,8 +34,8 @@ public abstract class KodiWorker extends AsyncTask<String, Void, AsyncTaskResult
         return new AsyncTaskResult<String>(response);
     }
 
-    private String playStream(String streamName) throws Exception {
-        String requestBodyJsonString = getBodyJsonString(streamName, 0);
+    private String playStream(String streamName, Integer qualityCode) throws Exception {
+        String requestBodyJsonString = getBodyJsonString(streamName, qualityCode);
         RequestBody body = RequestBody
                 .create(MediaType.parse("application/json; charset=utf-8"),requestBodyJsonString);
         Request request = new Request.Builder()

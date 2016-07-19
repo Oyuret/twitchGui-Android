@@ -3,7 +3,9 @@ package com.yuris.dev.twitchgui.games;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -46,7 +48,6 @@ public class GamesFragment extends Fragment {
      *
      * @return A new instance of fragment GamesFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static GamesFragment newInstance() {
         GamesFragment fragment = new GamesFragment();
         Bundle args = new Bundle();
@@ -59,6 +60,7 @@ public class GamesFragment extends Fragment {
         super.onCreate(savedInstanceState);
         games = new ArrayList<Game>();
         gamesAdapter = new GamesAdapter(getActivity(), games);
+        loadData();
     }
 
     @Override
@@ -98,12 +100,6 @@ public class GamesFragment extends Fragment {
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-        loadData();
-    }
-
-    @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof OnGameSelectedListener) {
@@ -122,6 +118,7 @@ public class GamesFragment extends Fragment {
 
     public interface OnGameSelectedListener {
         void onGameSelected(String gameName);
+        void notifyUser(String message);
     }
 
     private void loadData() {
@@ -130,7 +127,7 @@ public class GamesFragment extends Fragment {
             @Override
             protected void onPostExecute(AsyncTaskResult<List<Game>> listAsyncTaskResult) {
                 if(listAsyncTaskResult.hasError()) {
-                    Log.e("Games", "Error loading games");
+                    mListener.notifyUser("Failed to load games");
                 } else {
                     games.addAll(listAsyncTaskResult.getResult());
                     gamesAdapter.notifyDataSetChanged();
@@ -139,4 +136,5 @@ public class GamesFragment extends Fragment {
         };
         getGames.execute(new Integer[]{games.size()});
     }
+
 }

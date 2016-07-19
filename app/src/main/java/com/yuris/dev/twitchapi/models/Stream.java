@@ -170,7 +170,7 @@ public class Stream {
             return this;
         }
 
-        public Stream make() {
+        public Stream build() {
             return this.stream;
         }
     }

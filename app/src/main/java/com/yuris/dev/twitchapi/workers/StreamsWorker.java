@@ -93,7 +93,7 @@ public abstract class StreamsWorker extends AsyncTask<String, Void, AsyncTaskRes
                 .withPreviewMedium(streamObj.getJSONObject("preview").getString("medium"))
                 .withPreviewLarge(streamObj.getJSONObject("preview").getString("large"))
                 .withOnline(true)
-                .make();
+                .build();
 
         return stream;
     }

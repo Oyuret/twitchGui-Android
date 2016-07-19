@@ -1,20 +1,17 @@
 package com.yuris.dev.twitchgui.streams;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.GridView;
 import android.widget.ListView;
 
-import com.yuris.dev.twitchapi.models.Game;
 import com.yuris.dev.twitchapi.models.Stream;
 import com.yuris.dev.twitchapi.workers.StreamsWorker;
 import com.yuris.dev.twitchgui.R;
@@ -71,6 +68,7 @@ public class StreamsFragment extends Fragment {
         }
         streams = new ArrayList<Stream>();
         streamsAdapter = new StreamsAdapter(getActivity(), streams);
+        loadData();
     }
 
     @Override
@@ -120,12 +118,6 @@ public class StreamsFragment extends Fragment {
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-        loadData();
-    }
-
-    @Override
     public void onDetach() {
         super.onDetach();
         mListener = null;
@@ -137,8 +129,7 @@ public class StreamsFragment extends Fragment {
             @Override
             protected void onPostExecute(AsyncTaskResult<List<Stream>> listAsyncTaskResult) {
                 if(listAsyncTaskResult.hasError()) {
-                    Log.e("Streams", "Error loading streams");
-                    Log.e("Streams", listAsyncTaskResult.getError().getMessage());
+                    mListener.notifyUser("Failed to load Streams");
                 } else {
                     streams.addAll(listAsyncTaskResult.getResult());
                     streamsAdapter.notifyDataSetChanged();
@@ -151,5 +142,6 @@ public class StreamsFragment extends Fragment {
 
     public interface OnStreamSelectedListener {
         void onStreamSelected(String streamName);
+        void notifyUser(String message);
     }
 }

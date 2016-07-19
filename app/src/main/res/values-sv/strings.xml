@@ -7,4 +7,14 @@
     <string name="nav_browse">Bläddra</string>
     <string name="nav_following">Följer</string>
     <string name="nav_search">Sök</string>
+    <string name="settings_twitch_username">Användarnamn på Twitch</string>
+    <string name="settings_twitch_username_dialog">Mata in ditt användarnamn på Twitch</string>
+    <string name="settings_kodi_playback_quality">Uppspelningskvalité</string>
+    <string name="settings_kodi_playback_quality_dialog">Välj önskad uppspelningskvalité</string>
+    <string name="settings_twitch_username_summary">Ditt användarnamn på Twitch</string>
+    <string name="settings_kodi_address">Kodi-adress</string>
+    <string name="settings_kodi_address_summary">Adressen till Kodi-instansen du vill styra</string>
+    <string name="settings_kodi_address_dialog">Mata in adressen till din Kodi-instans</string>
+    <string name="nav_settings">Inställningar</string>
+    <string name="settings_kodi_playback_summary">Önskar uppspelningskvalité</string>
 </resources>

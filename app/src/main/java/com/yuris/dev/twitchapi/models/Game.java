@@ -63,7 +63,7 @@ public class Game {
             return this;
         }
 
-        public Game make() {
+        public Game build() {
             return this.game;
         }
     }

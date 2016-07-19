@@ -49,6 +49,8 @@ public class GamesAdapter extends ArrayAdapter<Game> {
         final TextView gameName = (TextView) rowView.findViewById(R.id.game_name);
         ImageView gameIcon = (ImageView) rowView.findViewById(R.id.game_icon);
 
+        gameName.setText(values.get(position).getName());
+
         picasso.load(values.get(position).getLogo())//
                 .placeholder(R.drawable.boxart_missing) //
                 .error(R.drawable.boxart_missing) //

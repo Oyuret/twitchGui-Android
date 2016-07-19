@@ -1,13 +1,11 @@
 package com.yuris.dev.twitchapi.workers;
 
 import android.os.AsyncTask;
-import android.util.Log;
 
 import com.yuris.dev.twitchapi.models.Game;
 import com.yuris.dev.utils.AsyncTaskResult;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -82,7 +80,7 @@ public abstract class GamesWorker extends AsyncTask<Integer, Void, AsyncTaskResu
                 .withChannels(gameObj.getInt("channels"))
                 .withViewers(gameObj.getInt("viewers"))
                 .withLogo(gameObj.getJSONObject("game").getJSONObject("box").getString("medium"))
-                .make();
+                .build();
 
         return game;
     }

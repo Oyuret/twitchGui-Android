@@ -1,5 +1,7 @@
 package com.yuris.dev.twitchgui;
 
+import android.content.SharedPreferences;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -8,8 +10,8 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -73,6 +75,12 @@ public class MainActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            Fragment fragment = new SettingsFragment().newInstance();
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.content_frame, fragment)
+                    .addToBackStack(null)
+                    .commit();
             return true;
         }
 
@@ -87,7 +95,7 @@ public class MainActivity extends AppCompatActivity
         Fragment fragment = null;
 
         if (id == R.id.nav_browse) {
-            fragment = new BrowseFragment().newInstance();
+            fragment = new GamesFragment().newInstance();
         } else if (id == R.id.nav_following) {
             fragment = new FollowingFragment().newInstance("Oyuret");
         } else if (id == R.id.nav_search) {
@@ -109,16 +117,36 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void onGameSelected(String gameName) {
-        BrowseFragment browseFragment = (BrowseFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.content_frame);
+    protected void onStart() {
+        super.onStart();
 
-        browseFragment.goToStreams(gameName);
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setCheckedItem(R.id.nav_browse);
+        navigationView.getMenu().performIdentifierAction(R.id.nav_browse, 0);
+    }
+
+    @Override
+    public void onGameSelected(String gameName) {
+        Fragment fragment = new StreamsFragment().newInstance(gameName);
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.content_frame, fragment)
+                .addToBackStack(null)
+                .commit();
     }
 
     @Override
     public void onStreamSelected(String streamName) {
 
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        String kodiAddress = prefs.getString("settings_kodi_address", "");
+        String qualityCode = prefs.getString("settings_kodi_playback_quality", "5");
+
+        if(kodiAddress.isEmpty()) {
+            notifyUser("Kodi address not set. Go to settings");
+            return;
+        }
+
         if(kodiIsIdle) {
             kodiIsIdle = false;
 
@@ -126,35 +154,20 @@ public class MainActivity extends AppCompatActivity
                 @Override
                 protected void onPostExecute(AsyncTaskResult<String> stringAsyncTaskResult) {
                     if(stringAsyncTaskResult.hasError()) {
-                        Log.e("Stream Failed", stringAsyncTaskResult.getError().getMessage());
+                        notifyUser("Failed to start your Stream");
                     } else {
-                        Log.e("Stream", stringAsyncTaskResult.getResult());
+                        notifyUser("Your stream has started");
                     }
                     kodiIsIdle = true;
                 }
             };
-            playStream.execute(new String[]{streamName});
+            playStream.execute(new String[]{streamName, qualityCode});
         }
 
     }
 
     @Override
-    public void onFollowedStreamSelected(String streamName) {
-        if(kodiIsIdle) {
-            kodiIsIdle = false;
-
-            KodiWorker playStream = new KodiWorker() {
-                @Override
-                protected void onPostExecute(AsyncTaskResult<String> stringAsyncTaskResult) {
-                    if(stringAsyncTaskResult.hasError()) {
-                        Log.e("Stream Failed", stringAsyncTaskResult.getError().getMessage());
-                    } else {
-                        Log.e("Stream", stringAsyncTaskResult.getResult());
-                    }
-                    kodiIsIdle = true;
-                }
-            };
-            playStream.execute(new String[]{streamName});
-        }
+    public void notifyUser(String message) {
+        Snackbar.make(findViewById(R.id.drawer_layout), message, Snackbar.LENGTH_SHORT).show();
     }
 }

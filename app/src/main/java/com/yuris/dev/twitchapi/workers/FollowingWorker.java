@@ -162,7 +162,7 @@ public abstract class FollowingWorker extends AsyncTask<String, Void, AsyncTaskR
                 .withPreviewMedium(streamObj.getJSONObject("preview").optString("medium"))
                 .withPreviewLarge(streamObj.getJSONObject("preview").optString("large"))
                 .withOnline(true)
-                .make();
+                .build();
 
         return stream;
     }
@@ -181,7 +181,7 @@ public abstract class FollowingWorker extends AsyncTask<String, Void, AsyncTaskR
                 .withViews(streamObj.getJSONObject("channel").getInt("views"))
                 .withViewers(streamObj.optInt("viewers", 0))
                 .withOnline(false)
-                .make();
+                .build();
 
         return stream;
     }
