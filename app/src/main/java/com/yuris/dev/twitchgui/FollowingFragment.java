@@ -44,10 +44,9 @@ public class FollowingFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param userName The username on Twitch.
      * @return A new instance of fragment FollowingFragment.
      */
-    public static FollowingFragment newInstance(String userName) {
+    public static FollowingFragment newInstance() {
         FollowingFragment fragment = new FollowingFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);

@@ -1,13 +1,29 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.yuris.dev.twitchgui.SearchFragment">
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    tools:context="com.yuris.dev.twitchgui.SearchFragment"
+    android:focusable="false"
+    android:focusableInTouchMode="false"
+    android:clickable="false">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/nav_search" />
+    <GridView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/searchResultsGridView"
+        android:layout_gravity="center"
+        android:numColumns="2"
+        android:stretchMode="columnWidth"
+        android:verticalSpacing="10dp"
+        android:horizontalSpacing="10dp"
+        android:layout_below="@+id/searchView"
+        android:focusableInTouchMode="false"
+        android:focusable="false"
+        android:clickable="false" />
 
-</FrameLayout>
+    <SearchView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/searchView"
+        android:iconifiedByDefault="true" />
+</RelativeLayout>

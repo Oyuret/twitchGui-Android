@@ -24,7 +24,8 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         GamesFragment.OnGameSelectedListener,
         StreamsFragment.OnStreamSelectedListener,
-        FollowingFragment.OnFollowedStreamSelectedListener {
+        FollowingFragment.OnFollowedStreamSelectedListener,
+        SearchFragment.OnSearchResultSelectedListener {
 
     private boolean kodiIsIdle = true;
 
@@ -44,6 +45,8 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        navigationView.setCheckedItem(R.id.nav_browse);
+        navigationView.getMenu().performIdentifierAction(R.id.nav_browse, 0);
     }
 
     @Override
@@ -97,9 +100,9 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.nav_browse) {
             fragment = new GamesFragment().newInstance();
         } else if (id == R.id.nav_following) {
-            fragment = new FollowingFragment().newInstance("Oyuret");
+            fragment = new FollowingFragment().newInstance();
         } else if (id == R.id.nav_search) {
-            fragment = new SearchFragment().newInstance("test1", "test2");
+            fragment = new SearchFragment().newInstance();
         }
 
         // Clear the backstack
@@ -114,15 +117,6 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setCheckedItem(R.id.nav_browse);
-        navigationView.getMenu().performIdentifierAction(R.id.nav_browse, 0);
     }
 
     @Override
