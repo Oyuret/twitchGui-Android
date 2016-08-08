@@ -43,7 +43,11 @@ public abstract class SearchWorker extends AsyncTask<String, Void, AsyncTaskResu
                 searchTerm);
 
         OkHttpClient client = new OkHttpClient();
-        Request request = new Request.Builder().url(url).build();
+        Request request = new Request.Builder()
+                .url(url)
+                .header("Accept", TwitchApiConstants.TWITCH_API_VERSION)
+                .header("Client-ID", TwitchApiConstants.TWITCH_API_CLIENT_ID)
+                .build();
         Response response = client.newCall(request).execute();
 
         if(response.isSuccessful()) {

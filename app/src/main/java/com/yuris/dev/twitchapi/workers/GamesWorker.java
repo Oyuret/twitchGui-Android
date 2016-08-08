@@ -15,6 +15,10 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+
 /**
  * Created by yuris on 2016-07-13.
  */
@@ -38,23 +42,19 @@ public abstract class GamesWorker extends AsyncTask<Integer, Void, AsyncTaskResu
 
     private String makeCall(Integer offset) throws Exception {
         String urlString = String.format("https://api.twitch.tv/kraken/games/top?limit=50&offset=%d", offset);
-        URL url = new URL(urlString);
-        HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-        urlConnection.setRequestProperty("Accept","application/vnd.twitchtv.v3+json");
 
-        try {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "UTF-8"), 8);
-            StringBuilder sb = new StringBuilder();
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder()
+                .url(urlString)
+                .header("Accept", TwitchApiConstants.TWITCH_API_VERSION)
+                .header("Client-ID", TwitchApiConstants.TWITCH_API_CLIENT_ID)
+                .build();
+        Response response = client.newCall(request).execute();
 
-            String line = null;
-            while ((line = reader.readLine()) != null) {
-                sb.append(line);
-            }
-
-            return sb.toString();
-
-        } finally {
-            urlConnection.disconnect();
+        if(response.isSuccessful()) {
+            return response.body().string();
+        } else {
+            throw new Exception(response.body().string());
         }
     }
 
