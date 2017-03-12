@@ -155,7 +155,7 @@ public class MainActivity extends AppCompatActivity
                     kodiIsIdle = true;
                 }
             };
-            playStream.execute(new String[]{streamName, qualityCode});
+            playStream.execute(new String[]{streamName, qualityCode, kodiAddress});
         }
 
     }

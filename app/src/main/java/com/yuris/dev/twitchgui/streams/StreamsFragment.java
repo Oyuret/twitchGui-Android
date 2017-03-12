@@ -3,9 +3,7 @@ package com.yuris.dev.twitchgui.streams;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,7 +49,6 @@ public class StreamsFragment extends Fragment {
      * @param gameName The name of the game which we will show streams for
      * @return A new instance of fragment StreamsFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static StreamsFragment newInstance(String gameName) {
         StreamsFragment fragment = new StreamsFragment();
         Bundle args = new Bundle();
